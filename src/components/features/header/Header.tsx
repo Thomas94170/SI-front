@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -11,7 +12,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img 
-              src="/ChatGPT Image 21 mai 2025 à 11_33_42.png" 
+              src="logo.png" 
               alt="Smart Invoice" 
               className="h-10 w-10"
             />
@@ -26,9 +27,9 @@ const Header = () => {
             <a href="#tarifs" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Tarifs
             </a>
-            <a href="#connexion" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-              Connexion
-            </a>
+            
+           <Link to="/login">Connexion</Link> 
+      
           </nav>
 
           {/* CTA Button */}

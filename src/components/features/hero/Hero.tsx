@@ -26,7 +26,7 @@ const Hero = () => {
             
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
               Créez des devis et factures professionnels, gérez vos documents et suivez votre chiffre d'affaires en temps réel. 
-              La solution tout-en-un pour les entrepreneurs et PME.
+              La solution tout-en-un pour les auto-entrepreneurs.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
