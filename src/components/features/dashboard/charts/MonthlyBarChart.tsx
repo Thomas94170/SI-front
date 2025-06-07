@@ -83,8 +83,8 @@ export default function MonthlyBarChart() {
           <YAxis />
           <Tooltip formatter={(val: number) => `${val.toLocaleString('fr-FR')} €`} />
           <Legend />
-          <Bar dataKey="income" name="CA mensuel" fill="#3BB273" minPointSize={1} />
-          <Bar dataKey="taxes" name="Taxes mensuelles" fill="#F40000" minPointSize={1} />
+          <Bar dataKey="income" name="CA mensuel" fill="#228CDB" minPointSize={1} />
+          <Bar dataKey="taxes" name="Taxes mensuelles" fill="#F18F01" minPointSize={1} />
         </BarChart>
       </ResponsiveContainer>
       </div>

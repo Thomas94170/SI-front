@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 const YEAR = new Date().getFullYear();
 
-const COLORS = ['#3BB273', '#F40000']; 
+const COLORS = ['#496DDB', '#EE8434']; 
 const RADIAN = Math.PI / 180;
 
 const renderCustomizedLabel = ({
