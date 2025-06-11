@@ -7,6 +7,8 @@ import InvoicePreview from './InvoicePreview';
 import { Printer, FileDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import html2pdf from 'html2pdf.js';
+
 
 export default function DocumentPreview() {
   const { activeDocument, currentQuote, currentInvoice } = useDocumentStore();
@@ -31,6 +33,23 @@ export default function DocumentPreview() {
     `,
   });
 
+  const handleDownload = () => {
+    if (!componentRef.current) return;
+    const element = componentRef.current;
+
+    const opt = {
+      margin:       0.5,
+      filename:     activeDocument === 'quote'
+        ? `Devis_${currentQuote.number}.pdf`
+        : `Facture_${currentInvoice?.number}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  };
+
   const renderPreview = () => {
     if (activeDocument === 'quote') {
       return <QuotePreview quote={currentQuote} />;
@@ -54,7 +73,7 @@ export default function DocumentPreview() {
         <Button 
           variant="outline" 
           size="sm" 
-          onClick={handlePrint}
+          onClick={handleDownload}
         >
           <FileDown className="mr-2 h-4 w-4" />
           Télécharger PDF
