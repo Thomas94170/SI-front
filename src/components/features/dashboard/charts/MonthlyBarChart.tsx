@@ -61,33 +61,36 @@ export default function MonthlyBarChart() {
     fetchMonthlyData()
   }, [])
 
-    return (
-        <div className='w-full h-[400px]'>
-         {errorMessage && (
-        <p className="text-red-600 font-medium">{errorMessage}</p>
+  return (
+    <div className="bg-gradient-to-br from-white via-orange-50 to-blue-50 p-6 rounded-2xl shadow-lg w-full max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+        📊 Revenu et taxes mensuels – {YEAR}
+      </h2>
+
+      {errorMessage && (
+        <p className="text-red-600 font-medium text-center mb-4">{errorMessage}</p>
       )}
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip formatter={(val: number) => `${val.toLocaleString('fr-FR')} €`} />
-          <Legend />
-          <Bar dataKey="income" name="CA mensuel" fill="#228CDB" minPointSize={1} />
-          <Bar dataKey="taxes" name="Taxes mensuelles" fill="#F18F01" minPointSize={1} />
-        </BarChart>
-      </ResponsiveContainer>
+
+      <div className="w-full h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis tickFormatter={(val) => `${val / 1000}k €`} />
+            <Tooltip formatter={(val: number) => `${val.toLocaleString('fr-FR')} €`} />
+            <Legend
+              wrapperStyle={{ fontSize: 14 }}
+              iconType="circle"
+            />
+            <Bar dataKey="income" name="CA mensuel" fill="#228CDB" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="taxes" name="Taxes mensuelles" fill="#F18F01" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-    );
+    </div>
+  );
   }
 

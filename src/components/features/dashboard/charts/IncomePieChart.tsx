@@ -68,11 +68,16 @@ export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieCha
   }, [onTotalIncomeCalculated]);
 
   return (
-    <div className='w-[400px] h-[400px]'>
+    <div className="bg-gradient-to-br from-white via-orange-50 to-blue-50 rounded-2xl shadow-lg p-6 w-full max-w-md mx-auto">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+        💰 Répartition Revenu / Taxes – {YEAR}
+      </h2>
+
       {errorMessage && (
-        <p className="text-red-600 font-medium">{errorMessage}</p>
+        <p className="text-red-600 font-medium text-center mb-2">{errorMessage}</p>
       )}
-      <ResponsiveContainer width= '100%' height= {400}>
+
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={data}
@@ -90,6 +95,17 @@ export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieCha
           </Pie>
         </PieChart>
       </ResponsiveContainer>
+
+      <div className="flex justify-center gap-4 mt-4 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-[#496DDB]" />
+          Revenu Net
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-[#EE8434]" />
+          Taxes
+        </div>
+      </div>
     </div>
   );
 }

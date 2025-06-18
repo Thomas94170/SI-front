@@ -22,29 +22,24 @@ export function InvToBeConfirmed() {
 
   const handleMarkAsPaid = async (invoiceName: string) => {
     try {
-        console.log(`🔄 Tentative de mise à jour de la facture : ${invoiceName} pour ${USER_ID}`);
+      console.log(`🔄 Tentative de mise à jour de la facture : ${invoiceName} pour ${USER_ID}`);
       const res = await fetch(`http://localhost:8000/invoice/update/${invoiceName}`, {
         method: "PATCH",
       });
       if (!res.ok) throw new Error("Échec de la mise à jour");
       const updated = await res.json();
       console.log(`✅ Facture mise à jour avec succès :`, updated);
-      // Supprimer la facture du tableau
       setInvoices((prev) => prev.filter((inv: any) => inv.invoiceName !== invoiceName));
-      console.log(`🧹 Facture retirée de l'affichage : ${invoiceName}`);
     } catch (err) {
       console.error("Erreur lors du changement de statut :", err);
     }
   };
-  
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        console.log(`invoice pour ${USER_ID}`)
-        const res = await fetch("http://localhost:8000/invoice");
+        const res = await fetch(`http://localhost:8000/invoice/${USER_ID}`);
         const data = await res.json();
-
         const onHoldInvoices = data.filter((invoice: any) => invoice.status === "ON_HOLD");
         setInvoices(onHoldInvoices);
 
@@ -63,57 +58,51 @@ export function InvToBeConfirmed() {
   }, []);
 
   return (
-    <div className="space-y-4">
-    <Typography variant="h5" className="text-blue-gray-700">
-      Factures en attente de paiement – à valider ou rejeter
-    </Typography>
+    <div className="space-y-6 p-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-xl shadow-md">
+      <Typography variant="h4" className="font-bold text-gray-800">
+        📌 Factures en attente – à valider ou rejeter
+      </Typography>
 
-    <Card className="h-full w-full overflow-scroll">
-      <table className="w-full min-w-max table-auto text-left">
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th
-                key={col}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4 capitalize"
-              >
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+      <Card className="overflow-hidden shadow-lg rounded-2xl border border-gray-100">
+        <table className="w-full table-auto text-left">
+          <thead className="bg-gradient-to-r from-orange-400 to-yellow-300 text-white">
+            <tr>
+              {columns.map((col) => (
+                <th key={col} className="p-4 text-sm font-semibold tracking-wide uppercase">
                   {columnLabels[col] || col}
-                </Typography>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {invoices.map((inv: any, index: number) => {
-            const isLast = index === invoices.length - 1;
-            const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+                </th>
+              ))}
+              <th className="p-4 text-sm font-semibold tracking-wide uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {invoices.map((inv: any, index: number) => {
+              const isLast = index === invoices.length - 1;
+              const rowClass = isLast ? "p-4" : "p-4 border-b border-gray-100";
 
-            return (
-              <tr key={inv.id}>
-                {columns.map((col) => (
-                  <td key={col} className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      {typeof inv[col] === "object"
-                        ? JSON.stringify(inv[col])
-                        : inv[col]}
-                    </Typography>
+              return (
+                <tr key={inv.id} className="hover:bg-blue-50 transition duration-200">
+                  {columns.map((col) => (
+                    <td key={col} className={rowClass}>
+                      <Typography variant="small" color="blue-gray" className="text-sm font-medium">
+                        {typeof inv[col] === "object" ? JSON.stringify(inv[col]) : inv[col]}
+                      </Typography>
+                    </td>
+                  ))}
+                  <td className={rowClass}>
+                    <button
+                      onClick={() => handleMarkAsPaid(inv.invoiceName)}
+                      className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold hover:bg-green-200 transition"
+                    >
+                      Marquer comme payée
+                    </button>
                   </td>
-                ))}
-                <td className={classes}>
-          <button
-            onClick={() => handleMarkAsPaid(inv.invoiceName)}
-            className="text-green-600 font-medium hover:underline"
-          >
-            Payé
-          </button>
-        </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Card>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </Card>
     </div>
   );
 }
