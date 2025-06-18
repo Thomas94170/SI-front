@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
+import useAuthStore from '../../../store/useAuthStore';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const {setToken} = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,12 +14,31 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulation d'une connexion
-    setTimeout(() => {
+    
+    try {
+      const res = await fetch(`http://localhost:8000/auth/login`, {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password})
+      });
+      if(!res.ok){
+        throw new Error('Echec connexion')
+      }
+      const data = await res.json();
+      const token = data.access_token;
+      setToken(token);
+      navigate('/dashboard')
+    } catch (error) {
+      console.error(`Erreur: ${error}`);
+      alert("Bad credentials")
+    }finally{
       setIsLoading(false);
       console.log('Connexion avec:', { email, password });
-    }, 2000);
+    } 
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
