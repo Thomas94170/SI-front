@@ -28,7 +28,11 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function IncomePieChart() {
+interface IncomePieChartProps {
+  onTotalIncomeCalculated: (total: number) => void;
+}
+
+export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieChartProps) {
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -47,6 +51,7 @@ export default function IncomePieChart() {
           { name: 'Revenu Net', value: netIncome },
           { name: 'Taxes', value: totalTaxes },
         ]);
+        onTotalIncomeCalculated(totalIncome);
         setErrorMessage(null); // reset l'erreur si success
       } catch (error) {
         if (error instanceof Error) {
@@ -60,7 +65,7 @@ export default function IncomePieChart() {
     };
 
     fetchData();
-  }, []);
+  }, [onTotalIncomeCalculated]);
 
   return (
     <div className='w-[400px] h-[400px]'>
