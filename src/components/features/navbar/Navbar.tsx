@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Receipt, Home } from 'lucide-react';
+import { FileText, Receipt, Home, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
@@ -86,7 +86,7 @@ const Navbar = () => {
               to="/doc-management"
             />
             <NavItem 
-              icon={<Home className="w-5 h-5" />}
+              icon={<LogOut className="w-5 h-5" />}
               label="Se déconnecter"
               to="/logout"
               isLogout

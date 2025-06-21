@@ -11,6 +11,7 @@ import InvoiceManagementPage from './pages/InvoiceManagementPage'
 import QuoteInvoicePage from './pages/QuoteInvoicePage'
 import DocumentManagementPage from './pages/DocumentManagement'
 import Logout from './components/features/auth/Logout'
+import FeaturesPage from './pages/FeaturesPage'
 
 
 function App() {
@@ -26,7 +27,9 @@ function App() {
       <Route path="/invoice-management" element={<InvoiceManagementPage />} />
       <Route path="/quote-invoice" element={<QuoteInvoicePage />} />
       <Route path="/doc-management" element={<DocumentManagementPage />} />
+      <Route path="/features" element={<FeaturesPage />} />
       <Route path="/logout" element={<Logout />} />
+
 
      
     </Routes>

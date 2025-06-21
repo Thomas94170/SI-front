@@ -21,14 +21,10 @@ const Header = () => {
 
           {/* Navigation Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#fonctionnalites" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-              Fonctionnalités
-            </a>
-            <a href="#tarifs" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-              Tarifs
-            </a>
+          <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/features">Fonctionnalités</Link> 
+          <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/price">Tarifs</Link> 
             
-           <Link to="/login">Connexion</Link> 
+           <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/login">Connexion</Link> 
       
           </nav>
 
@@ -54,15 +50,10 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-100">
             <div className="flex flex-col space-y-4">
-              <a href="#fonctionnalites" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-                Fonctionnalités
-              </a>
-              <a href="#tarifs" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-                Tarifs
-              </a>
-              <a href="#connexion" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-                Connexion
-              </a>
+            <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/features">Fonctionnalités</Link> 
+          <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/price">Tarifs</Link> 
+            
+           <Link className="text-gray-600 hover:text-gray-900 transition-colors font-medium" to="/login">Connexion</Link> 
               <button className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-2.5 rounded-lg font-semibold w-full">
                 Essayez gratuitement
               </button>
