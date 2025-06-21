@@ -4,49 +4,48 @@ import { Card, Typography } from "@material-tailwind/react";
 const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 // prochaine étape : enlever l id en dur et le faire passer par le token 
 const columnLabels: Record<string, string> = {
-  invoiceName: "Facture",
-  client: "Client",
-  totalBT: "Montant HT",
-  totalInclTax: "Montant TTC",
-  dueDate: "Date d’échéance",
-  phoneNumber: "Téléphone",
-  email: "Email",
-  status: "Statut",
+  originalName: "Facture",
+  metadata : "Informations"
+ 
 };
 
-const hiddenColumns = ["id", "userId", "user", "status"];
+const hiddenColumns = ["id", "userId", "filename", "status", "url", "type"];
 
-export function InvoicePaid() {
-  const [invoices, setInvoices] = useState([]);
+export function DocPaid() {
+  const [documents, setDocuments] = useState([]);
   const [columns, setColumns] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchDocuments = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/invoice/${USER_ID}`);
+        const res = await fetch(`http://localhost:8000/documents/${USER_ID}`);
         const data = await res.json();
+        console.log(res)
+        console.log(data)
         // regarder pour faire un fetch sur documents aussi afin que la facture venant d'un document apparaisse? ou sinon faire un autre component appelant les documents 
-        const onHoldInvoices = data.filter((invoice: any) => invoice.status === "PAID");
-        setInvoices(onHoldInvoices);
+        const statusDoc = data.filter((document: any) => document.status === "VALIDATED");
+        setDocuments(statusDoc);
+        console.log(statusDoc)
 
-        if (onHoldInvoices.length > 0) {
-          const keys = Object.keys(onHoldInvoices[0]).filter(
+        if (statusDoc.length > 0) {
+          const keys = Object.keys(statusDoc[0]).filter(
             (key) => !hiddenColumns.includes(key)
           );
           setColumns(keys);
+          console.log(columns)
         }
       } catch (err) {
         console.error("Erreur lors du fetch des factures :", err);
       }
     };
 
-    fetchInvoices();
+    fetchDocuments();
   }, []);
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-xl shadow-md">
       <Typography variant="h4" className="font-bold text-gray-800">
-        ✅ Vos factures payées
+        ✅ Vos factures externes payées
       </Typography>
 
       <Card className="overflow-hidden shadow-lg rounded-2xl border border-gray-100">
@@ -61,19 +60,26 @@ export function InvoicePaid() {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {invoices.map((inv: any, index: number) => {
-              const isLast = index === invoices.length - 1;
+            {documents.map((doc: any, index: number) => {
+              const isLast = index === documents.length - 1;
               const rowClass = isLast ? "p-4" : "p-4 border-b border-gray-100";
 
-              return (
-                <tr key={inv.id} className="hover:bg-blue-50 transition duration-200">
+     return (
+                <tr key={doc.id} className="hover:bg-blue-50 transition duration-200">
                   {columns.map((col) => (
                     <td key={col} className={rowClass}>
-                      <Typography variant="small" color="blue-gray" className="text-sm font-medium">
-                        {typeof inv[col] === "object" ? JSON.stringify(inv[col]) : inv[col]}
-                      </Typography>
+                        <Typography variant="small" color="blue-gray" className="text-sm font-medium">
+                        {col === "metadata" ? (
+                        <div className="space-y-1">
+                            <p><span className="font-semibold">Total TTC :</span> {doc.metadata?.totalTTC || "—"}</p>
+                            <p><span className="font-semibold">Paiement prévu :</span> {doc.metadata?.paymentDate || "—"}</p>
+                        </div>
+                            ) : (
+                            doc[col]
+                            )}
+                        </Typography>
                     </td>
-                  ))}
+                    ))}
                 </tr>
               );
             })}

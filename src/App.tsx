@@ -9,6 +9,7 @@ import Register from './components/features/auth/Register'
 import DashboardPage from './pages/DashboardPage'
 import InvoiceManagementPage from './pages/InvoiceManagementPage'
 import QuoteInvoicePage from './pages/QuoteInvoicePage'
+import DocumentManagementPage from './pages/DocumentManagement'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/invoice-management" element={<InvoiceManagementPage />} />
       <Route path="/quote-invoice" element={<QuoteInvoicePage />} />
+      <Route path="/doc-management" element={<DocumentManagementPage />} />
 
      
     </Routes>
