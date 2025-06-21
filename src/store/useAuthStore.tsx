@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 function decodeToken(token: string): { exp?: number } {
   try {
+    console.log(token)
     return JSON.parse(atob(token.split('.')[1]));
   } catch {
     return {};
@@ -17,6 +18,7 @@ interface AuthState {
 const useAuthStore = create<AuthState>((set) => ({
   token: null,
   setToken: (token: string) => {
+    console.log('Nouveau token défini :', token);
     const { exp } = decodeToken(token);
     if (exp) {
       const now = Date.now() / 1000;
@@ -32,7 +34,10 @@ const useAuthStore = create<AuthState>((set) => ({
 
     set({ token });
   },
-  logout: () => set({ token: null }),
+  logout: () => {
+    console.log('Déconnexion manuelle : token supprimé');
+    set({ token: null });
+  },
 }));
 
 export default useAuthStore;

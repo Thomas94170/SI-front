@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Receipt, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -66,15 +67,29 @@ const Navbar = () => {
             <NavItem 
               icon={<Home className="w-5 h-5" />}
               label="Dashboard"
-              active={true}
+              //active={true}
+              to="/dashboard"
             />
             <NavItem 
               icon={<FileText className="w-5 h-5" />}
               label="Devis & Facturation"
+              to="/quote-invoice"
             />
             <NavItem 
               icon={<Receipt className="w-5 h-5" />}
               label="Gestion des factures"
+              to="/invoice-management"
+            />
+            <NavItem 
+              icon={<Receipt className="w-5 h-5" />}
+              label="Gestion des factures externes"
+              to="/doc-management"
+            />
+            <NavItem 
+              icon={<Home className="w-5 h-5" />}
+              label="Se déconnecter"
+              to="/logout"
+              isLogout
             />
           </div>
         </div>
@@ -86,23 +101,28 @@ const Navbar = () => {
 interface NavItemProps {
   icon: React.ReactNode;
   label: string;
+  to?: string;
   active?: boolean;
+  isLogout?: boolean;
+
 }
 
-const NavItem = ({ icon, label, active = false }: NavItemProps) => {
+const NavItem = ({ icon, label, to = "#", active = false, isLogout = false }: NavItemProps) => {
+  const baseClass = `flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 group ${
+    active 
+      ? 'bg-gradient-to-r from-amber-500/20 to-orange-600/20 text-amber-400 border border-amber-500/30' 
+      : isLogout
+        ? 'text-red-400 hover:text-white hover:bg-red-500/20'
+        : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+  }`;
+
   return (
-    <button
-      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 group ${
-        active 
-          ? 'bg-gradient-to-r from-amber-500/20 to-orange-600/20 text-amber-400 border border-amber-500/30' 
-          : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-      }`}
-    >
-      <span className={`transition-colors ${active ? 'text-amber-400' : 'text-slate-400 group-hover:text-white'}`}>
+    <Link to={to} className={baseClass}>
+      <span className={`transition-colors ${active ? 'text-amber-400' : isLogout ? 'text-red-400' : 'text-slate-400 group-hover:text-white'}`}>
         {icon}
       </span>
       <span className="font-medium text-sm whitespace-nowrap">{label}</span>
-    </button>
+    </Link>
   );
 };
 
