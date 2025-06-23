@@ -12,6 +12,7 @@ import QuoteInvoicePage from './pages/QuoteInvoicePage'
 import DocumentManagementPage from './pages/DocumentManagement'
 import Logout from './components/features/auth/Logout'
 import FeaturesPage from './pages/FeaturesPage'
+import ProtectedRoute from './components/features/ProtectedRoute'
 
 
 function App() {
@@ -23,12 +24,40 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/invoice-management" element={<InvoiceManagementPage />} />
-      <Route path="/quote-invoice" element={<QuoteInvoicePage />} />
-      <Route path="/doc-management" element={<DocumentManagementPage />} />
-      <Route path="/features" element={<FeaturesPage />} />
-      <Route path="/logout" element={<Logout />} />
+
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+        <DashboardPage />
+        </ProtectedRoute>} />
+
+      <Route path="/invoice-management" element={
+        <ProtectedRoute>
+        <InvoiceManagementPage />
+        </ProtectedRoute>
+        } />
+
+      <Route path="/quote-invoice" element={
+        <ProtectedRoute>
+        <QuoteInvoicePage />
+        </ProtectedRoute>
+        } />
+      
+      <Route path="/doc-management" element={
+        <ProtectedRoute>
+        <DocumentManagementPage />
+        </ProtectedRoute>} />
+
+      <Route path="/features" element={
+        <ProtectedRoute>
+        <FeaturesPage />
+        </ProtectedRoute>
+        } />
+
+      <Route path="/logout" element={
+        <ProtectedRoute>
+        <Logout />
+        
+        </ProtectedRoute>} />
 
 
      
