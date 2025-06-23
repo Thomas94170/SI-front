@@ -4,10 +4,12 @@ import { Card } from "../components/features/quote-invoice/ui/card";
 import QuoteForm from "../components/features/quote-invoice/form/QuoteForm";
 import DocumentPreview from "../components/features/quote-invoice/preview/DocumentPreview";
 import useDocumentStore from "../store/useDocumentStore";
+import useAuthStore from "../store/useAuthStore";
 
 export default function QuoteInvoicePage() {
     const { activeDocument, currentQuote, currentInvoice } = useDocumentStore();
-
+    const userId = useAuthStore((state) => state.userId);
+    console.log("👤 Utilisateur connecté :", userId);
   // Set document title
   useEffect(() => {
     document.title = 'Smart Invoice Editor';
@@ -40,3 +42,5 @@ export default function QuoteInvoicePage() {
     </Layout>
   );
 }
+
+// faire les useState pour creer une facture 

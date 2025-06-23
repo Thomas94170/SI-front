@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
+import useAuthStore from '../../../../store/useAuthStore';
+
+//const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 const YEAR = new Date().getFullYear();
 const months = [
     { name: 'Janvier', number: 1, year: YEAR },
@@ -20,14 +22,18 @@ const months = [
 export default function MonthlyBarChart() {
  const [data, setData] = useState<unknown[]>([])
  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+ const userId = useAuthStore((state) => state.userId);
+
+
 
  useEffect(() => {
+  if (!userId) return;
     const fetchMonthlyData = async () => {
       try {
         const results = await Promise.all(
           months.map(async (month) => {
-            const incomeRes = await fetch(`http://localhost:8000/income/monthly-income?year=${YEAR}&month=${month.number}&userId=${USER_ID}`)
-            const taxRes = await fetch(`http://localhost:8000/income/monthly-taxation?year=${YEAR}&month=${month.number}&userId=${USER_ID}`)
+            const incomeRes = await fetch(`http://localhost:8000/income/monthly-income?year=${YEAR}&month=${month.number}&userId=${userId}`)
+            const taxRes = await fetch(`http://localhost:8000/income/monthly-taxation?year=${YEAR}&month=${month.number}&userId=${userId}`)
 
             const incomeJson = incomeRes.ok ? await incomeRes.json() : { value: 0 };
             const taxJson = taxRes.ok ? await taxRes.json() : { value: 0 };
@@ -59,7 +65,7 @@ export default function MonthlyBarChart() {
     }
 
     fetchMonthlyData()
-  }, [])
+  }, [userId])
 
   return (
     <div className="bg-gradient-to-br from-white via-orange-50 to-blue-50 p-6 rounded-2xl shadow-lg w-full max-w-6xl mx-auto">

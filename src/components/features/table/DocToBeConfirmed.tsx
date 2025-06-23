@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
-
-const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
+import useAuthStore from "../../../store/useAuthStore";
+//const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 
 const columnLabels: Record<string, string> = {
   originalName: "Facture",
@@ -14,6 +14,7 @@ const columnLabels: Record<string, string> = {
 const hiddenColumns = ["id", "userId", "user", "status", "filename"];
 
 export function DocToBeConfirmed() {
+  const userId = useAuthStore((state)=> state.userId)
   const [documents, setDocuments] = useState([]);
   const [columns, setColumns] = useState<string[]>([]);
 
@@ -61,9 +62,10 @@ export function DocToBeConfirmed() {
   
 
   useEffect(() => {
+    if (!userId) return;
     const fetchDocuments = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/documents/${USER_ID}`);
+        const res = await fetch(`http://localhost:8000/documents/${userId}`);
         const data = await res.json();
         const inProgressDoc = data.filter((document: any) => document.status === "IN_PROGRESS");
         setDocuments(inProgressDoc);
@@ -80,7 +82,7 @@ export function DocToBeConfirmed() {
     };
 
     fetchDocuments();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-xl shadow-md">

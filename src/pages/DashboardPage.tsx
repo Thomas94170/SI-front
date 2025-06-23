@@ -5,26 +5,17 @@ import Navbar from "../components/features/navbar/Navbar";
 import useAuthStore from "../store/useAuthStore";
 
 
-function decodeToken(token: string): { userId?: string } {
-  try {
-    return JSON.parse(atob(token.split('.')[1]));
-  } catch {
-    return {};
-  }
-}
+
 
 export default function DashboardPage() {
     const [totalIncome, setTotalIncome] = useState< number | null>(null)
-    const token = useAuthStore((state) => state.token);
+    const userId = useAuthStore((state) => state.userId);
 
     useEffect(() => {
-      if (token) {
-        const { userId } = decodeToken(token);
-        if (userId) {
-          console.log(`connecté avec userId : ${userId}`);
-        }
+      if (userId) {
+        console.log(`👤 Connecté avec userId : ${userId}`);
       }
-    }, [token]);
+    }, [userId]);
   return (
     <>
       <Navbar />

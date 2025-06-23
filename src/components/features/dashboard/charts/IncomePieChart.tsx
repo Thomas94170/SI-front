@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import useAuthStore from '../../../../store/useAuthStore';
 
-const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
+//const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 const YEAR = new Date().getFullYear();
 
 const COLORS = ['#496DDB', '#EE8434']; 
@@ -35,12 +36,15 @@ interface IncomePieChartProps {
 export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieChartProps) {
   const [data, setData] = useState<{ name: string; value: number }[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const userId = useAuthStore((state) => state.userId);
 
   useEffect(() => {
+    if (!userId) return;
+
     const fetchData = async () => {
       try {
-        const incomeRes = await fetch(`http://localhost:8000/income/annual-income?year=${YEAR}&userId=${USER_ID}`);
-        const taxRes = await fetch(`http://localhost:8000/income/annual-taxation?year=${YEAR}&userId=${USER_ID}`);
+        const incomeRes = await fetch(`http://localhost:8000/income/annual-income?year=${YEAR}&userId=${userId}`);
+        const taxRes = await fetch(`http://localhost:8000/income/annual-taxation?year=${YEAR}&userId=${userId}`);
 
         const totalIncome = await incomeRes.json();
         const totalTaxes = await taxRes.json();
@@ -65,7 +69,7 @@ export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieCha
     };
 
     fetchData();
-  }, [onTotalIncomeCalculated]);
+  }, [userId, onTotalIncomeCalculated]);
 
   return (
     <div className="bg-gradient-to-br from-white via-orange-50 to-blue-50 rounded-2xl shadow-lg p-6 w-full max-w-md mx-auto">

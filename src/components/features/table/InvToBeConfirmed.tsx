@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
-
-const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
+import useAuthStore from "../../../store/useAuthStore";
+//const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 
 const columnLabels: Record<string, string> = {
   invoiceName: "Facture",
@@ -17,12 +17,13 @@ const columnLabels: Record<string, string> = {
 const hiddenColumns = ["id", "userId", "user", "status"];
 
 export function InvToBeConfirmed() {
+  const userId = useAuthStore((state)=> state.userId)
   const [invoices, setInvoices] = useState([]);
   const [columns, setColumns] = useState<string[]>([]);
 
   const handleMarkAsPaid = async (invoiceName: string) => {
     try {
-      console.log(`🔄 Tentative de mise à jour de la facture : ${invoiceName} pour ${USER_ID}`);
+      console.log(`🔄 Tentative de mise à jour de la facture : ${invoiceName} pour ${userId}`);
       const res = await fetch(`http://localhost:8000/invoice/update/${invoiceName}`, {
         method: "PATCH",
       });
@@ -36,9 +37,10 @@ export function InvToBeConfirmed() {
   };
 
   useEffect(() => {
+    if (!userId) return;
     const fetchInvoices = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/invoice/${USER_ID}`);
+        const res = await fetch(`http://localhost:8000/invoice/${userId}`);
         const data = await res.json();
         const onHoldInvoices = data.filter((invoice: any) => invoice.status === "ON_HOLD");
         setInvoices(onHoldInvoices);
@@ -55,7 +57,7 @@ export function InvToBeConfirmed() {
     };
 
     fetchInvoices();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-xl shadow-md">
