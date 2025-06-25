@@ -48,16 +48,16 @@ function App() {
         </ProtectedRoute>} />
 
       <Route path="/features" element={
-        <ProtectedRoute>
+       
         <FeaturesPage />
-        </ProtectedRoute>
+       
         } />
 
       <Route path="/logout" element={
-        <ProtectedRoute>
+        
         <Logout />
         
-        </ProtectedRoute>} />
+       } />
 
 
      

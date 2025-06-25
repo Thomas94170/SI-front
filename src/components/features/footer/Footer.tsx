@@ -87,7 +87,7 @@ const Footer = () => {
             © 2025 Smart Invoice. Tous droits réservés.
           </p>
           <div className="flex items-center space-x-6 mt-4 md:mt-0">
-            <span className="text-gray-400 text-sm">Fait avec ❤️ en France</span>
+            <span className="text-gray-400 text-sm">Développé par DevWeb Solutions</span>
           </div>
         </div>
       </div>
