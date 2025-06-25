@@ -1,40 +1,38 @@
 import { useEffect, useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import useAuthStore from "../../../store/useAuthStore";
-//const USER_ID = '140d8575-8552-42b8-a878-b6ad31f7e4e2';
 
 const columnLabels: Record<string, string> = {
   originalName: "Facture",
   metadata: "Informations",
- 
-
-  
 };
 
-const hiddenColumns = ["id", "userId", "user", "status", "filename"];
+const hiddenColumns = ["id", "userId", "user", "status", "filename", "url", "textExtracted", "createdAt"];
 
-export function DocToBeConfirmed() {
-  const userId = useAuthStore((state)=> state.userId)
-  const [documents, setDocuments] = useState([]);
+export function DocToBeConfirmed({
+  documents,
+  setDocuments,
+}: {
+  documents: any[];
+  setDocuments: React.Dispatch<React.SetStateAction<any[]>>;
+}) {
+  const userId = useAuthStore((state) => state.userId);
   const [columns, setColumns] = useState<string[]>([]);
 
   const handleMarkAsPaid = async (doc: any) => {
     try {
       let paymentDate = doc.metadata?.paymentDate;
-  
-      // Si la date est vide → on demande à l'utilisateur
+
       if (!paymentDate) {
         paymentDate = prompt(
           "Aucune date détectée pour cette facture. Veuillez saisir une date de paiement (ex : 30/06/2025)"
         );
-  
-        // Si l'utilisateur annule ou ne remplit rien
         if (!paymentDate || paymentDate.trim() === "") {
           alert("Action annulée : aucune date fournie.");
           return;
         }
       }
-  
+
       const res = await fetch(
         `http://localhost:8000/documents/update/${doc.originalName}`,
         {
@@ -45,13 +43,12 @@ export function DocToBeConfirmed() {
           body: JSON.stringify({ paymentDate }),
         }
       );
-  
+
       if (!res.ok) throw new Error("Échec de la mise à jour");
-  
+
       const updated = await res.json();
       console.log("✅ Document mis à jour avec succès :", updated);
-  
-      // Supprime le doc de la liste affichée
+
       setDocuments((prev) =>
         prev.filter((d: any) => d.originalName !== doc.originalName)
       );
@@ -59,30 +56,16 @@ export function DocToBeConfirmed() {
       console.error("Erreur lors du changement de statut :", err);
     }
   };
-  
 
+  // recalcul des colonnes quand les documents changent
   useEffect(() => {
-    if (!userId) return;
-    const fetchDocuments = async () => {
-      try {
-        const res = await fetch(`http://localhost:8000/documents/${userId}`);
-        const data = await res.json();
-        const inProgressDoc = data.filter((document: any) => document.status === "IN_PROGRESS");
-        setDocuments(inProgressDoc);
-
-        if (inProgressDoc.length > 0) {
-          const keys = Object.keys(inProgressDoc[0]).filter(
-            (key) => !hiddenColumns.includes(key)
-          );
-          setColumns(keys);
-        }
-      } catch (err) {
-        console.error("Erreur lors du fetch des factures :", err);
-      }
-    };
-
-    fetchDocuments();
-  }, [userId]);
+    if (documents.length > 0) {
+      const keys = Object.keys(documents[0]).filter(
+        (key) => !hiddenColumns.includes(key)
+      );
+      setColumns(keys);
+    }
+  }, [documents]);
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 rounded-xl shadow-md">
@@ -95,11 +78,16 @@ export function DocToBeConfirmed() {
           <thead className="bg-gradient-to-r from-orange-400 to-yellow-300 text-white">
             <tr>
               {columns.map((col) => (
-                <th key={col} className="p-4 text-sm font-semibold tracking-wide uppercase">
+                <th
+                  key={col}
+                  className="p-4 text-sm font-semibold tracking-wide uppercase"
+                >
                   {columnLabels[col] || col}
                 </th>
               ))}
-              <th className="p-4 text-sm font-semibold tracking-wide uppercase">Action</th>
+              <th className="p-4 text-sm font-semibold tracking-wide uppercase">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white">
@@ -108,27 +96,42 @@ export function DocToBeConfirmed() {
               const rowClass = isLast ? "p-4" : "p-4 border-b border-gray-100";
 
               return (
-                <tr key={doc.id} className="hover:bg-blue-50 transition duration-200">
+                <tr
+                  key={doc.id}
+                  className="hover:bg-blue-50 transition duration-200"
+                >
                   {columns.map((col) => (
                     <td key={col} className={rowClass}>
-                        <Typography variant="small" color="blue-gray" className="text-sm font-medium">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="text-sm font-medium"
+                      >
                         {col === "metadata" ? (
-                        <div className="space-y-1">
-                            <p><span className="font-semibold">Total TTC :</span> {doc.metadata?.totalTTC || "—"}</p>
-                            <p><span className="font-semibold">Paiement prévu :</span> {doc.metadata?.paymentDate || "—"}</p>
-                        </div>
-                            ) : (
-                            doc[col]
-                            )}
-                        </Typography>
+                          <div className="space-y-1">
+                            <p>
+                              <span className="font-semibold">Total TTC :</span>{" "}
+                              {doc.metadata?.totalTTC || "—"}
+                            </p>
+                            <p>
+                              <span className="font-semibold">
+                                Paiement prévu :
+                              </span>{" "}
+                              {doc.metadata?.paymentDate || "—"}
+                            </p>
+                          </div>
+                        ) : (
+                          doc[col]
+                        )}
+                      </Typography>
                     </td>
-                    ))}
+                  ))}
                   <td className={rowClass}>
                     <button
-                    onClick={() => handleMarkAsPaid(doc)}
-                    className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold hover:bg-green-200 transition"
+                      onClick={() => handleMarkAsPaid(doc)}
+                      className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold hover:bg-green-200 transition"
                     >
-                    Marquer comme payée
+                      Marquer comme payée
                     </button>
                   </td>
                 </tr>

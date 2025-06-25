@@ -9,7 +9,7 @@ const columnLabels: Record<string, string> = {
   type: "Type",
 };
 
-export default function DropZone() {
+export default function DropZone({ onUploadSuccess }: { onUploadSuccess?: (doc: any) => void }) {
   const userId = useAuthStore((state)=> state.userId)
   const [files, setFiles] = useState<File[]>([]);
   const dropRef = useRef<HTMLTableRowElement>(null);
@@ -56,6 +56,8 @@ export default function DropZone() {
         const result = await res.json();
         console.log('✅ Métadonnées extraites :', result.metadata);
         console.log('📄 Document enregistré :', result.originalName);
+        if (onUploadSuccess) onUploadSuccess(result);
+
       } catch (error) {
         console.error('❌ Échec de l’envoi du fichier :', error);
       }
