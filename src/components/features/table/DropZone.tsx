@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Card, Typography, Button } from "@material-tailwind/react";
+import { Card, Typography} from "@material-tailwind/react";
 import { Trash2, UploadCloud } from "lucide-react";
 import useAuthStore from "../../../store/useAuthStore";
 

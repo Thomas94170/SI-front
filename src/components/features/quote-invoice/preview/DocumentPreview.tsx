@@ -1,22 +1,20 @@
 import { useRef } from 'react';
 import  { useReactToPrint,  } from 'react-to-print';
 import useDocumentStore from '../../../../store/useDocumentStore';
-
 import QuotePreview from './QuotePreview';
 import InvoicePreview from './InvoicePreview';
 import { Printer, FileDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
-import html2pdf from 'html2pdf.js';
+import * as html2pdf from 'html2pdf.js';
 import ErrorBoundary from '../../../ErrorBoundary';
-
 
 export default function DocumentPreview() {
   const { activeDocument, currentQuote, currentInvoice } = useDocumentStore();
   const componentRef = useRef<HTMLDivElement>(null);
   
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => componentRef.current!,
     documentTitle: activeDocument === 'quote' 
       ? `Devis_${currentQuote.number}` 
       : `Facture_${currentInvoice?.number}`,
@@ -32,7 +30,7 @@ export default function DocumentPreview() {
         }
       }
     `,
-  });
+  } as Parameters<typeof useReactToPrint>[0]);
 
   const handleDownload = () => {
     if (!componentRef.current) return;
@@ -47,7 +45,8 @@ export default function DocumentPreview() {
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     html2pdf().set(opt).from(element).save();
   };
 

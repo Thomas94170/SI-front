@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { UserPlus, FileText, BarChart3 } from 'lucide-react';
 
 const HowItWorks = () => {
