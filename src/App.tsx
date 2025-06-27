@@ -13,6 +13,7 @@ import DocumentManagementPage from './pages/DocumentManagement'
 import Logout from './components/features/auth/Logout'
 import FeaturesPage from './pages/FeaturesPage'
 import ProtectedRoute from './components/features/ProtectedRoute'
+import PricePage from './pages/PricePage'
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/price" element={<PricePage/>} />
 
       <Route path="/dashboard" element={
         <ProtectedRoute>
