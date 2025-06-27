@@ -23,6 +23,10 @@ export function DocToBeConfirmed({
     try {
       let paymentDate = doc.metadata?.paymentDate;
 
+      if(!userId){
+        return
+      }
+
       if (!paymentDate) {
         paymentDate = prompt(
           "Aucune date détectée pour cette facture. Veuillez saisir une date de paiement (ex : 30/06/2025)"
