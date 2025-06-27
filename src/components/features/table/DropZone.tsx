@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { Card, Typography} from "@material-tailwind/react";
 import { Trash2, UploadCloud } from "lucide-react";
 import useAuthStore from "../../../store/useAuthStore";
+import { Button } from "@material-tailwind/react";
+
 
 const columnLabels: Record<string, string> = {
   name: "Nom du fichier",

@@ -16,9 +16,18 @@ declare module "@material-tailwind/react" {
       shadow?: boolean;
       [key: string]: any;
     }
+
+    export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+      children?: ReactNode;
+      className?: string;
+      color?: string;
+      shadow?: boolean;
+      [key: string]: any;
+    }
     
     export const Typography: React.FC<TypographyProps>;
     export const Card: React.FC<CardProps>;
+    export const Button: React.FC<ButtonProps>
     
     // Ajoutez d'autres composants au besoin
   }
