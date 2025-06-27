@@ -6,7 +6,7 @@ import InvoicePreview from './InvoicePreview';
 import { Printer, FileDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
-import * as html2pdf from 'html2pdf.js';
+import html2pdf from 'html2pdf.js';
 import ErrorBoundary from '../../../ErrorBoundary';
 
 export default function DocumentPreview() {
@@ -45,8 +45,8 @@ export default function DocumentPreview() {
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+    
+   // verifier ici pourquoi facture undefined, ca doit etre le currentInvoice?.number
     html2pdf().set(opt).from(element).save();
   };
 

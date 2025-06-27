@@ -63,6 +63,7 @@ export function createInvoiceFromQuote(quote: QuoteData): InvoiceData {
   return {
     id: generateUniqueId(),
     number: invoiceNumber,
+    invoiceName: `Facture ${invoiceNumber}`,
     createdAt: new Date().toISOString().split('T')[0],
     dueDate: dueDate.toISOString().split('T')[0],
     client: quote.client,
