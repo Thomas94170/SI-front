@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { FileText, Upload, TrendingUp } from 'lucide-react';
 
 const Benefits = () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Star, Users, TrendingUp, Shield } from 'lucide-react';
 
 const SocialProof = () => {

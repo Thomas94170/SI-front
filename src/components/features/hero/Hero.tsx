@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { ArrowRight, Play } from 'lucide-react';
 
 const Hero = () => {

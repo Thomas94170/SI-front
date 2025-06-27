@@ -1,4 +1,4 @@
-import { FileText, FileCheck, Settings } from 'lucide-react';
+import { FileText, FileCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { useToast } from '../../../../hooks/use-toast';
