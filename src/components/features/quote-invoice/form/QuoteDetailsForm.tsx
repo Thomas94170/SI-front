@@ -49,6 +49,15 @@ export default function QuoteDetailsForm() {
             <Input
               id="number"
               {...register('number', { required: "Le numéro est requis" })}
+              value={watch('number')}
+              onChange={(e) => {
+              const value = e.target.value;
+              setValue('number', value); // garde en phase avec react-hook-form
+              import('../../../../store/useDocumentStore').then((mod) => {
+                console.log('[ZUSTAND] Mise à jour du quote number dans le store :', value); 
+                mod.default.getState().updateQuote({ number: value }); // sync Zustand
+              });
+              }}
               className={errors.number ? "border-destructive" : ""}
             />
             {errors.number && (

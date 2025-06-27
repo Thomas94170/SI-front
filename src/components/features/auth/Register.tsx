@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -11,13 +13,40 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
     setIsLoading(true);
-    // Simulation d'une connexion
-    setTimeout(() => {
+
+    try {
+      const res = await fetch(`http://localhost:8000/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Erreur lors de l’inscription');
+      }
+
+      const data = await res.json();
+      console.log('Inscription réussie:', data);
+      alert("Inscription réussie !");
+      navigate('/login');
+    } catch (error) {
+      console.error(`Erreur: ${error}`);
+      alert("Erreur lors de l’inscription");
+    } finally {
       setIsLoading(false);
-      console.log('Connexion avec:', { email, password });
-    }, 2000);
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
@@ -156,9 +185,12 @@ const Register = () => {
           <div className="text-center">
             <p className="text-slate-400">
               Déjà un compte ?{' '}
-              <a href="#" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+              <Link
+                to="/login"
+                className="text-amber-400 hover:text-amber-300 font-medium transition-colors"
+              >
                 Se connecter
-              </a>
+              </Link>
             </p>
           </div>
         </div>

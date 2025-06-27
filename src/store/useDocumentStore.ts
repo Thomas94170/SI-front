@@ -2,11 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { QuoteData, InvoiceData, DocumentType } from '../lib/types';
 import { DEFAULT_QUOTE } from '../lib/types';
+import useAuthStore from './useAuthStore';
+import { calculateSubtotal, calculateTaxes } from '../lib/utils';
+
 
 import { 
   generateQuoteNumber, 
   generateUniqueId, 
-  createInvoiceFromQuote 
+ // createInvoiceFromQuote 
 } from '../lib/utils';
 
 interface DocumentState {
@@ -90,30 +93,75 @@ const useDocumentStore = create<DocumentState>()(
           return { savedQuotes: updatedQuotes };
         }),
 
-      generateInvoice: () => 
-        set((state) => {
-          // Save the quote first
-          const existingIndex = state.savedQuotes.findIndex(
-            (q) => q.id === state.currentQuote.id
-          );
-          
-          const updatedQuotes = existingIndex >= 0
-            ? state.savedQuotes.map((q, i) => 
-                i === existingIndex ? state.currentQuote : q
-              )
-            : [...state.savedQuotes, state.currentQuote];
+        generateInvoice: async () => {
+          const { saveQuote } = get();
+          const { userId } = useAuthStore.getState();
+        
+          if (!userId) {
+            console.error("Utilisateur non authentifié.");
+            return;
+          }
 
-          // Create invoice from quote
-          const newInvoice = createInvoiceFromQuote(state.currentQuote);
+          saveQuote();
+
+  // 📦 Recharge le quote à jour juste après la sauvegarde
+        const updatedQuote = get().currentQuote;
+
+        
+          const subtotal = calculateSubtotal(updatedQuote.items);
+          const taxes = calculateTaxes(updatedQuote.items);
+          const totalInclTax = subtotal + taxes;
           
-          return { 
-            savedQuotes: updatedQuotes,
-            currentInvoice: newInvoice,
-            activeDocument: 'invoice',
+
+          const payload = {
+            
+            invoiceName: updatedQuote.number.replace(/^DE/, 'FA'),
+            client: updatedQuote.client.name,
+            email: updatedQuote.client.email || '',
+            phoneNumber: updatedQuote.client.phone || '',
+            dueDate: new Date(updatedQuote.validUntil).toISOString(),
+            totalBT: subtotal,
+            totalInclTax: totalInclTax,
+            userId,
           };
-        }),
+        
+          try {
+            console.log("🧾 Numéro de devis :", updatedQuote.number);
+            const response = await fetch('http://localhost:8000/invoice', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+            console.log(`userId & response : ${userId} ${response}` )
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error("Erreur API:", errorText);
+              throw new Error(errorText);
+            }
+        
+            const newInvoice = await response.json();
+            console.log("📄 Réponse API :", newInvoice);
 
-      deleteQuote: (id) => 
+        
+            set({
+              currentInvoice: {
+                ...newInvoice, // les infos de la BDD
+                business: updatedQuote.business, // injecté côté front
+                client: updatedQuote.client,
+                items: updatedQuote.items,
+                notes: updatedQuote.notes,
+                termsAndConditions: updatedQuote.termsAndConditions,
+                currency: updatedQuote.currency,
+              },
+              activeDocument: 'invoice',
+            });
+          } catch (error) {
+            console.error("Erreur lors de la génération de la facture:", error);
+          }
+        },
+        
+
+        deleteQuote: (id) => 
         set((state) => ({
           savedQuotes: state.savedQuotes.filter((q) => q.id !== id),
           // Reset current quote if it's the one being deleted

@@ -37,6 +37,7 @@ export interface QuoteData {
 }
 
 export interface InvoiceData extends Omit<QuoteData, 'validUntil'> {
+  invoiceName: string
   dueDate: string;
   quoteId: string;
   quoteNumber: string;

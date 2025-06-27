@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
 import useAuthStore from '../../../store/useAuthStore';
 
@@ -156,9 +156,12 @@ const Login = () => {
           <div className="text-center">
             <p className="text-slate-400">
               Pas encore de compte ?{' '}
-              <a href="#" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+              <Link
+                to="/register"
+                className="text-amber-400 hover:text-amber-300 font-medium transition-colors"
+              >
                 Créer un compte
-              </a>
+              </Link>
             </p>
           </div>
         </div>

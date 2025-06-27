@@ -8,6 +8,7 @@ import { Printer, FileDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import html2pdf from 'html2pdf.js';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 
 export default function DocumentPreview() {
@@ -54,7 +55,8 @@ export default function DocumentPreview() {
     if (activeDocument === 'quote') {
       return <QuotePreview quote={currentQuote} />;
     } else if (activeDocument === 'invoice' && currentInvoice) {
-      return <InvoicePreview invoice={currentInvoice} />;
+      return<ErrorBoundary fallback={<p>Impossible d’afficher la facture.</p>}>
+      <InvoicePreview invoice={currentInvoice} /> </ErrorBoundary>;
     }
     return <div className="p-8 text-center">Aucun document à afficher</div>;
   };

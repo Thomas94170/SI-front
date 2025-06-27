@@ -7,9 +7,9 @@ interface InvoicePreviewProps {
 }
 
 export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
-  const subtotal = calculateSubtotal(invoice.items);
-  const taxes = calculateTaxes(invoice.items);
-  const total = calculateTotal(invoice.items);
+  const subtotal = calculateSubtotal(invoice.items || []);
+  const taxes = calculateTaxes(invoice.items || []);
+  const total = calculateTotal(invoice.items || []);
 
   return (
     <div className="flex flex-col gap-8 text-black">
@@ -17,13 +17,13 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
       <div className="flex justify-between">
         <div>
           <h1 className="text-3xl font-bold text-blue-900">FACTURE</h1>
-          <p className="mt-1 text-gray-600">N° {invoice.number}</p>
+          <p className="mt-1 text-gray-600">N° {invoice.invoiceName}</p>
         </div>
         <div className="text-right">
-          <p className="text-lg font-semibold">{invoice.business.name}</p>
-          <p className="text-sm text-gray-500">{invoice.business.address}</p>
+          <p className="text-lg font-semibold">{invoice.business.name || 'Entreprise'}</p>
+          <p className="text-sm text-gray-500">{invoice.business.address|| 'Adresse'}</p>
           <p className="text-sm text-gray-500">
-            SIRET: {invoice.business.siret}
+            SIRET: {invoice.business.siret|| 'Siret'}
           </p>
         </div>
       </div>
@@ -85,7 +85,7 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
             </tr>
           </thead>
           <tbody>
-            {invoice.items.map((item) => (
+          {(invoice.items || []).map((item) => (
               <tr key={item.id} className="border-b border-gray-200">
                 <td className="py-3 text-sm">{item.description}</td>
                 <td className="py-3 text-right text-sm">{item.quantity}</td>
