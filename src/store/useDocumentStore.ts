@@ -127,7 +127,7 @@ const useDocumentStore = create<DocumentState>()(
         
           try {
             console.log("🧾 Numéro de devis :", updatedQuote.number);
-            const response = await fetch('http://localhost:8000/invoice', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/invoice`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),

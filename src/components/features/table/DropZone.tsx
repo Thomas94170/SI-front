@@ -45,7 +45,7 @@ export default function DropZone({ onUploadSuccess }: { onUploadSuccess?: (doc: 
       formData.append('userId', userId);
   
       try {
-        const res = await fetch('http://localhost:8000/documents', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/documents`, {
           method: 'POST',
           body: formData,
         });

@@ -24,7 +24,7 @@ export function InvToBeConfirmed() {
   const handleMarkAsPaid = async (invoiceName: string) => {
     try {
       console.log(`🔄 Tentative de mise à jour de la facture : ${invoiceName} pour ${userId}`);
-      const res = await fetch(`http://localhost:8000/invoice/update/${invoiceName}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/invoice/update/${invoiceName}`, {
         method: "PATCH",
       });
       if (!res.ok) throw new Error("Échec de la mise à jour");
@@ -40,8 +40,10 @@ export function InvToBeConfirmed() {
     if (!userId) return;
     const fetchInvoices = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/invoice/${userId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/invoice/${userId}`);
         const data = await res.json();
+        console.log("API response:", data);
+        
         const onHoldInvoices = data.filter((invoice: any) => invoice.status === "ON_HOLD");
         setInvoices(onHoldInvoices);
 

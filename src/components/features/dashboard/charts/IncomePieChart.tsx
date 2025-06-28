@@ -43,13 +43,17 @@ export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieCha
 
     const fetchData = async () => {
       try {
-        const incomeRes = await fetch(`http://localhost:8000/income/annual-income?year=${YEAR}&userId=${userId}`);
-        const taxRes = await fetch(`http://localhost:8000/income/annual-taxation?year=${YEAR}&userId=${userId}`);
+        const incomeRes = await fetch(`${import.meta.env.VITE_API_URL}/income/annual-income/${YEAR}/${userId}`);
+        const taxRes = await fetch(`${import.meta.env.VITE_API_URL}/income/annual-taxation/${YEAR}/${userId}`);
 
         const totalIncome = await incomeRes.json();
         const totalTaxes = await taxRes.json();
 
         const netIncome = totalIncome - totalTaxes;
+        console.log('totalIncome:', totalIncome);
+        console.log('totalTaxes:', totalTaxes);
+        console.log('netIncome:', netIncome);
+
 
         setData([
           { name: 'Revenu Net', value: netIncome },

@@ -26,7 +26,7 @@ export function InvoicePaid() {
     if (!userId) return;
     const fetchInvoices = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/invoice/${userId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/invoice/${userId}`);
         const data = await res.json();
         // regarder pour faire un fetch sur documents aussi afin que la facture venant d'un document apparaisse? ou sinon faire un autre component appelant les documents 
         const onHoldInvoices = data.filter((invoice: any) => invoice.status === "PAID");

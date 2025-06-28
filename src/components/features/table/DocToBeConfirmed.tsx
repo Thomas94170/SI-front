@@ -38,7 +38,7 @@ export function DocToBeConfirmed({
       }
 
       const res = await fetch(
-        `http://localhost:8000/documents/update/${doc.originalName}`,
+        `${import.meta.env.VITE_API_URL}/documents/update/${doc.originalName}`,
         {
           method: "PATCH",
           headers: {

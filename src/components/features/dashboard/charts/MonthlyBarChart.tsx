@@ -32,8 +32,8 @@ export default function MonthlyBarChart() {
       try {
         const results = await Promise.all(
           months.map(async (month) => {
-            const incomeRes = await fetch(`http://localhost:8000/income/monthly-income?year=${YEAR}&month=${month.number}&userId=${userId}`)
-            const taxRes = await fetch(`http://localhost:8000/income/monthly-taxation?year=${YEAR}&month=${month.number}&userId=${userId}`)
+            const incomeRes = await fetch(`${import.meta.env.VITE_API_URL}/income/monthly-income/${YEAR}/${month.number}/${userId}`)
+            const taxRes = await fetch(`${import.meta.env.VITE_API_URL}/income/monthly-taxation/${YEAR}/${month.number}/${userId}`)
 
             const incomeJson = incomeRes.ok ? await incomeRes.json() : { value: 0 };
             const taxJson = taxRes.ok ? await taxRes.json() : { value: 0 };

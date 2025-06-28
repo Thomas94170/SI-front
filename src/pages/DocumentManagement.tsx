@@ -12,7 +12,7 @@ export default function DocumentManagementPage() {
     if (!userId) return;
     const fetchDocuments = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/documents/${userId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/documents/${userId}`);
         const data = await res.json();
         const inProgress = data.filter(
           (doc: any) => doc.status === "IN_PROGRESS"
