@@ -16,6 +16,7 @@ const Login = () => {
     setIsLoading(true);
     
     try {
+      console.log("👉 Appel login vers :", `${import.meta.env.VITE_API_URL}/auth/login`);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: 'POST',
         headers:{
