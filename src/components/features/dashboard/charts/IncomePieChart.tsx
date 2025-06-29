@@ -117,3 +117,4 @@ export default function IncomePieChart({ onTotalIncomeCalculated }: IncomePieCha
     </div>
   );
 }
+//regarder les logs
