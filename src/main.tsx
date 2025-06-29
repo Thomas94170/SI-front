@@ -11,4 +11,4 @@ createRoot(document.getElementById('root')!).render(
   </BrowserRouter>
 )
 
-//var .env pour render et aws
+//var .env pour render et aws probleme 
