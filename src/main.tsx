@@ -10,3 +10,5 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </BrowserRouter>
 )
+
+//var .env pour render et aws
