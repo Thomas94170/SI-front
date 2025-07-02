@@ -145,8 +145,9 @@ const useDocumentStore = create<DocumentState>()(
         
             set({
               currentInvoice: {
-                ...newInvoice, // les infos de la BDD
-                business: updatedQuote.business, // injecté côté front
+                ...newInvoice,
+                invoiceName: updatedQuote.number.replace(/^DE/, 'FA'),
+                business: updatedQuote.business,
                 client: updatedQuote.client,
                 items: updatedQuote.items,
                 notes: updatedQuote.notes,
@@ -154,7 +155,9 @@ const useDocumentStore = create<DocumentState>()(
                 currency: updatedQuote.currency,
               },
               activeDocument: 'invoice',
+             
             });
+            console.log('res : ', newInvoice);
           } catch (error) {
             console.error("Erreur lors de la génération de la facture:", error);
           }

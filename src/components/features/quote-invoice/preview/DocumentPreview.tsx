@@ -40,11 +40,12 @@ export default function DocumentPreview() {
       margin:       0.5,
       filename:     activeDocument === 'quote'
         ? `Devis_${currentQuote.number}.pdf`
-        : `Facture_${currentInvoice?.number}.pdf`,
+        : `Facture_${currentInvoice?.invoiceName || 'facture'}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
+    console.log('filename invoice : ', opt.filename);
     
    // verifier ici pourquoi facture undefined, ca doit etre le currentInvoice?.number
     html2pdf().set(opt).from(element).save();
